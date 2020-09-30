@@ -151,11 +151,25 @@ Error message and password prompt
 
 <li>$:/config/PageControlButtons/Visibility/$:/core/ui/Buttons/permaview</li>
 
+<li>$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/contents</li>
+
+<li>$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/hamburger</li>
+
+<li>$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/search</li>
+
+<li>$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/server</li>
+
+<li>$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/topleftbar</li>
+
+<li>$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/toprightbar</li>
+
 <li>$:/config/RelinkOnRename</li>
 
 <li>$:/config/TextEditor/EnableToolbar</li>
 
 <li>$:/config/Tiddlers/TitleLinks</li>
+
+<li>$:/config/Toolbar/Icons</li>
 
 <li>$:/config/topStoryView</li>
 
@@ -205,11 +219,15 @@ Error message and password prompt
 
 <li>$:/state/sidebar</li>
 
+<li>$:/state/tab--1963855381</li>
+
 <li>$:/state/tab-1749438307</li>
 
 <li>$:/state/tab-2065006209</li>
 
 <li>$:/state/tab/sidebar--595412856</li>
+
+<li>$:/state/tabs/controlpanel/toolbars-1345989671</li>
 
 <li>$:/status/RequireReloadDueToPluginChange</li>
 
@@ -515,6 +533,24 @@ exports.startup = function() {
 <div created="20170414222442239" creator="Mat von TWaddle" modified="20170613114319078" modifier="Mat von TWaddle" title="$:/config/PageControlButtons/Visibility/$:/core/ui/Buttons/permaview">
 <pre>hide</pre>
 </div>
+<div created="20200930154328131" modified="20200930154328131" title="$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/contents">
+<pre>hide</pre>
+</div>
+<div created="20200930154311900" modified="20200930154314021" title="$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/hamburger">
+<pre>show</pre>
+</div>
+<div created="20200930154407352" modified="20200930154411792" title="$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/search">
+<pre>hide</pre>
+</div>
+<div created="20200930154404364" modified="20200930154410616" title="$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/server">
+<pre>hide</pre>
+</div>
+<div created="20200930154252991" modified="20200930154252991" title="$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/topleftbar">
+<pre>hide</pre>
+</div>
+<div created="20200930154302746" modified="20200930154302746" title="$:/config/plugins/menubar/MenuItems/Visibility/$:/plugins/tiddlywiki/menubar/items/toprightbar">
+<pre>hide</pre>
+</div>
 <div created="20200929181945126" modified="20200929181945126" title="$:/config/RelinkOnRename">
 <pre>yes</pre>
 </div>
@@ -522,6 +558,9 @@ exports.startup = function() {
 <pre>yes</pre>
 </div>
 <div created="20160112001347610" modified="20200930153926847" title="$:/config/Tiddlers/TitleLinks">
+<pre>no</pre>
+</div>
+<div created="20200930154450582" modified="20200930154450582" title="$:/config/Toolbar/Icons">
 <pre>no</pre>
 </div>
 <div created="20160410201306695" creator="twMat" modified="20170613122052071" modifier="twMat" scroll-offset="20px" title="$:/config/topStoryView">
@@ -10193,17 +10232,23 @@ tc-page-container tc-page-view-$(themeTitle)$ tc-language-$(languageTitle)$
 <div created="20200930073940971" end="" modified="20200930154000985" poradie_otazok="[[New Tiddler 2]] [[New Tiddler 2 1 1]] [[New Tiddler 2 1 1 1]] [[New Tiddler 2 1]]" title="$:/state/SampleReveal2">
 <pre></pre>
 </div>
-<div created="20200930041916460" modified="20200930153414303" title="$:/state/sidebar">
+<div created="20200930041916460" modified="20200930154219526" title="$:/state/sidebar">
 <pre>yes</pre>
 </div>
-<div created="20200416183327180" modified="20200930154039351" title="$:/state/tab-1749438307">
+<div created="20200930154241529" modified="20200930154241529" title="$:/state/tab--1963855381">
+<pre>$:/core/ui/ControlPanel/Toolbars</pre>
+</div>
+<div created="20200416183327180" modified="20200930154502491" title="$:/state/tab-1749438307">
 <pre>$:/core/ui/ControlPanel/Saving</pre>
 </div>
 <div created="20200416183332199" modified="20200930150831111" title="$:/state/tab-2065006209">
 <pre>$:/core/ui/ControlPanel/Saving/General</pre>
 </div>
-<div created="20200416183341514" modified="20200930150240394" title="$:/state/tab/sidebar--595412856">
-<pre>$:/core/ui/SideBar/Recent</pre>
+<div created="20200416183341514" modified="20200930154511638" title="$:/state/tab/sidebar--595412856">
+<pre>$:/core/ui/SideBar/Tools</pre>
+</div>
+<div created="20200930154244582" modified="20200930154357729" title="$:/state/tabs/controlpanel/toolbars-1345989671">
+<pre>$:/plugins/tiddlywiki/menubar/config</pre>
 </div>
 <div title="$:/status/RequireReloadDueToPluginChange">
 <pre>no</pre>
@@ -10211,7 +10256,7 @@ tc-page-container tc-page-view-$(themeTitle)$ tc-language-$(languageTitle)$
 <div created="20160407102858708" creator="t" modified="20170612120258347" modifier="Mat von TWaddle" title="$:/status/UserName">
 <pre></pre>
 </div>
-<div created="20200930153417563" list="Kvíz" modified="20200930154037793" title="$:/StoryList">
+<div created="20200930154221237" list="$:/ControlPanel Kvíz" modified="20200930154221237" title="$:/StoryList">
 <pre></pre>
 </div>
 <div created="20200417144937811" modified="20200930073857086" title="$:/temp/advancedsearch">

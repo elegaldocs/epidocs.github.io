@@ -1,0 +1,90 @@
+// conversation script is below
+// "start" auto-runs to begin the bot conversation 
+
+
+
++ start
+- Aké je vaše procesné postavenie?<br> 
+^ <button onclick="chatbot.sendReply('prokurátor')">Prokurátor</button><br>
+^ <button onclick="chatbot.sendReply('obvinený')">Obvinený</button><br>
+^ <button onclick="chatbot.sendReply('poškodený')">Poškodený</button><br>
+^ <button onclick="chatbot.sendReply('obhajca')">Obhajca</button>
+
+
++ (obvinený|prokurátor|poškodený|obhajca)
+- <set actor=<star>> {@decision}  
+
++ decision
+- O aké rozhodnutie sa jedná?<br>
+^ <button onclick="chatbot.sendReply('príkaz')">Príkaz</button><br>
+^ <button onclick="chatbot.sendReply('uznesenie')">Uznesenie</button><br>
+^ <button onclick="chatbot.sendReply('trestný rozkaz')">Trestný rozkaz</button><br>
+^ <button onclick="chatbot.sendReply('rozsudok')">Rozsudok</button>
+
++ (príkaz|uznesenie|trestný rozkaz|rozsudok)
+- <set decision=<star>> {@enunciat}  
+
++ enunciat
+* <get decision> == príkaz => Proti príkazu nie je opravný prostriedok prípustný.
+* <get decision> == uznesenie => Špecifikujte výrok uznesenia!<br>
+^ <button onclick="chatbot.sendReply('zastavenie')">Zastavenie</button><br>
+^ <button onclick="chatbot.sendReply('postúpenie')">Postúpenie</button><br>
+^ <button onclick="chatbot.sendReply('podmienečné zastavenie')">Podmienečné zastavenie</button><br>
+^ <button onclick="chatbot.sendReply('schválenie zmieru')">Schválenie zmieru</button>
+- Špecifikujte výrok!<br>
+^ <button onclick="chatbot.sendReply('vine')">O vine</button><br>
+^ <button onclick="chatbot.sendReply('treste')">O treste</button><br>
+^ <button onclick="chatbot.sendReply('náhrade škody')">O náhrade škody</button><br>
+^ <button onclick="chatbot.sendReply('ochrannom opatrení')">o ochrannom opatrení</button>
+
++ (zastavenie|postúpenie|podmienečné zastavenie|schválenie zmieru|vine|treste|náhrade škody|ochrannom opatrení)
+* <star> == zastavenie => Je možné podať opravný prostriedok.<br>
+- nie je možné podať opravný prostriedok
+
+
+> object conclusion javascript
+  var actor = bot.getUservar(null, 'actor');
+  var decision = bot.getUservar(null, 'decision');
+  const rozhodnutia = {
+  "zastavenie": [ "obvinený", "poškodený", "obhajca" ],
+  "postúpenie": [ "poškodený", "obvinený"],
+  "podmienečné zastavenie": [ "poškodený", "obvinený", "obhajca" ],
+  "vine": [ "prokurátor", "obhajca", "obvinený"] ,
+  "treste": [ "prokurátor", "obvinený", "obhajca" ],
+  "náhrade škody": [ "poškodený", "obvinený", "obhajca", "prokurátor"],
+  "ochrannom opatrení": [ "obhajca", "obvinený", "prokurátor"]
+  };
+  return rozhodnutia['zastavenie'][0]
+
+
+< object
+
+
++ *
+% zadajte názov spoločnosti
+- <set name=<star>> názov spoločnosti je <star><br>
+^ prajete si vytvoriť dokument?<br>
+^ ak áno napíšte áno
+
+
++ 1
+- <set doc=<b>obžaloba</b>&nbsp<get name>><get doc>
+
++ 2
+- <get doc><call>skuska <get doc></call>
+
++ youre awesome
+- Thanks. You are even more awesome.
+
+> object getRandomTerm javascript
+  return getRandomTerm();
+< object
+
+> object skuska javascript
+  var name  = args[0];
+  var versions = window.parent.jseditor.getEditor('root.editor.editor.content');
+  versions.setValue(name);
+  return 'bol zadaný'
+< object
++ random
+- Finding a random term... <call>getRandomTerm</call>

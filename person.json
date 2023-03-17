@@ -1,0 +1,628 @@
+{
+    "type": "object",
+    "definitions": {
+      "PageAutoComplete": {
+        "options": {
+          "compact": true,
+          "disable_collapse": true,
+          "disable_edit_json": true
+        },
+        "properties": {
+          "PageAutoCompleteNameButton": {
+            "type": "button",
+            "title": " ",
+            "description": "Predvyplní fomulár.",
+            "options": {
+              "button": {
+                "align": "right",
+                "action": "PageAutoCompleteNameButtonCB"
+              },
+              "inputAttributes": {
+                "class": "fas fa-pen btn-lg float-right",
+                "data-target": "#myModal",
+                "data-toggle": "modal"
+              }
+            }
+          }
+        }
+      },
+      "ownerDebtor": {
+        "format": "tabs-top",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "title": "Osoba",
+          "headerTemplate": "Osoba {{self.name}}",
+          "properties": {
+            "name": {
+              "title": "Meno",
+              "options": {},
+              "anyOf": [
+                {
+                  "title": "Custom",
+                  "type": "string"
+                },
+                {
+                  "title": "Enum",
+                  "type": "string",
+                  "uniqueItems": true,
+                  "watch": {
+                    "owner": "subject.person"
+                  },
+                  "format": "select2",
+                  "options": {
+                    "select2": {
+                      "multiple": "multiple",
+                      "tags": true
+                    }
+                  },
+                  "enumSource": [
+                    {
+                      "source": "owner",
+                      "filter": "{{#if (eq item.entityTitle 'predávajúci')}}1{{/if}}",
+                      "title": "{{item.entityTitle}} {{item.naturalPerson.surName}} {{item.naturalPerson.lastName}}{{item.legalPerson.surName}} {{item.legalPerson.lastName}}",
+                      "value": "{{item.naturalPerson.surName}} {{item.naturalPerson.lastName}}{{item.legalPerson.surName}} {{item.legalPerson.lastName}}"
+                    }
+                  ]
+                }
+              ]
+            },
+            "ownership": {
+              "$ref": "./objects.json#/definitions/ownership"
+            },
+            "share": {
+              "type": "string",
+              "title": "Veľkosť podieľu",
+              "options": {
+                "infoText": "Zadajte výšku podieľu zlomkom, napr. 1/1 pre výlučného vlastníka."
+              }
+            }
+          }
+        }
+      },
+      "subject": {
+        "title": "Zmluvné strany",
+        "type": "array",
+        "format": "tabs-top",
+        "minItems": 1,
+        "items": {
+          "title": "Osoba",
+          "$ref": "#/definitions/persons"
+        }
+      },
+      "addressArray": {
+        "type": "array",
+        "title": "Adresy",
+        "format": "tabs-top",
+        "minItems": 1,
+        "options": {
+          "array_controls_top": true
+        },
+        "items": {
+          "$ref": "#/definitions/address"
+        }
+      },
+      "persons": {
+        "title": "Zmluvné strany",
+        "propertyOrder": 1,
+        "type": "object",
+        "properties": {
+          "personType": {
+            "title": "Druh osoby",
+            "type": "string",
+            "format": "radio",
+            "enum": [
+              "právnická osoba",
+              "fyzická osoba"
+            ]
+          },
+          "naturalPerson": {
+            "format": "categories",
+            "basicCategoryTitle": "Identifikačné údaje osoby",
+            "$ref": "#/definitions/naturalPerson",
+            "options": {
+              "dependencies": {
+                "personType": "fyzická osoba"
+              }
+            }
+          },
+          "legalPerson": {
+            "format": "categories",
+            "basicCategoryTitle": "Identifikačné údaje osoby",
+            "$ref": "#/definitions/legalPerson",
+            "options": {
+              "dependencies": {
+                "personType": "právnická osoba"
+              }
+            }
+          }
+        },
+        "options": {
+          "no_additional_properties": true
+        }
+      },
+      "court": {
+        "type": "object",
+        "propertyOrder": 1,
+        "title": "Orgán aplikácie práva",
+        "options": {
+          "disable_properties": true,
+          "compact": true
+        },
+        "properties": {
+          "PageAutoComplete": {
+            "propertyOrder": 100,
+            "$ref": "#/definitions/PageAutoComplete"
+          },
+          "PageAutoCompleteName": {
+            "type": "string",
+            "default": "court",
+            "options": {
+              "hidden": true
+            }
+          },
+          "title": {
+            "title": "Titul pred menom",
+            "type": "string",
+            "enum": [
+              "",
+              "Ing.",
+              "Mgr.",
+              "JUDr.",
+              "MUDr."
+            ],
+            "default": "",
+            "options": {
+              "grid_columns": 2
+            }
+          },
+          "surName": {
+            "title": "Krstné meno",
+            "type": "string",
+            "minLength": 1,
+            "options": {
+              "required": true,
+              "inputAttributes": {},
+              "grid_columns": 4
+            }
+          },
+          "lastName": {
+            "title": "Priezvisko",
+            "type": "string",
+            "options": {
+              "required": true,
+              "grid_columns": 4
+            }
+          },
+          "nameSuffix": {
+            "title": "Titul za menom",
+            "type": "string",
+            "options": {
+              "grid_columns": 2
+            },
+            "enum": [
+              "",
+              "PhD.",
+              "MBA.",
+              "CSC.",
+              "MPA."
+            ]
+          },
+          "position": {
+            "title": "Funkcia osoby",
+            "description": "napr. prokurátor",
+            "type": "string"
+          },
+          "phone": {
+            "title": "Mobil",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "fax": {
+            "title": "fax",
+            "type": "string",
+            "description": "",
+            "format": "text"
+          },
+          "address": {
+            "title": "Adresa",
+            "type": "object",
+            "properties": {
+              "organisationName": {
+                "title": "Názov inštitúcie",
+                "type": "string",
+                "description": "napr. Krajská prokuratúra v Trenčíne",
+                "format": "text"
+              },
+              "street": {
+                "title": "Názov ulice",
+                "type": "string"
+              },
+              "streetNumber": {
+                "title": "Súpisné číslo",
+                "type": "string"
+              },
+              "orientationNumber": {
+                "title": "Popisné číslo",
+                "type": "string"
+              },
+              "municipality": {
+                "title": "Obec",
+                "type": "string"
+              },
+              "zip": {
+                "title": "Poštové smerovacie číslo",
+                "type": "string"
+              },
+              "state": {
+                "title": "Štát",
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "naturalPerson": {
+        "type": "object",
+        "propertyOrder": 1,
+        "title": "Fyzická osoba",
+        "options": {
+          "disable_properties": true,
+          "compact": true
+        },
+        "properties": {
+          "PageAutoComplete": {
+            "propertyOrder": 100,
+            "$ref": "#/definitions/PageAutoComplete"
+          },
+          "PageAutoCompleteName": {
+            "type": "string",
+            "default": "natural-person",
+            "options": {
+              "hidden": true
+            }
+          },
+          "title": {
+            "title": "Titul pred menom",
+            "type": "string",
+            "enum": [
+              "",
+              "Ing.",
+              "Mgr.",
+              "JUDr.",
+              "MUDr."
+            ],
+            "default": "",
+            "options": {
+              "grid_columns": 2
+            }
+          },
+          "surName": {
+            "title": "Krstné meno",
+            "type": "string",
+            "minLength": 1,
+            "options": {
+              "required": true,
+              "inputAttributes": {},
+              "grid_columns": 4
+            }
+          },
+          "lastName": {
+            "title": "Priezvisko",
+            "type": "string",
+            "options": {
+              "required": true,
+              "grid_columns": 4
+            }
+          },
+          "nameSuffix": {
+            "title": "Titul za menom",
+            "type": "string",
+            "options": {
+              "grid_columns": 2
+            },
+            "enum": [
+              "",
+              "PhD.",
+              "MBA.",
+              "CSC.",
+              "MPA."
+            ]
+          },
+          "nameAtBirth": {
+            "title": "Rodné priezvisko",
+            "type": "string"
+          },
+          "personalIdentificationNumber": {
+            "title": "Rodné číslo",
+            "type": "string"
+          },
+          "citizenship": {
+            "title": "Občianstvo",
+            "type": "string"
+          },
+          "idCardType": {
+            "title": "Druh identifikačného dokladu",
+            "type": "string"
+          },
+          "idCardNumber": {
+            "title": "Číslo identifikačného dokladu",
+            "type": "string"
+          },
+          "birthDate": {
+            "title": "Dátum narodenia",
+            "type": "string",
+            "format": "date",
+            "options": {}
+          },
+          "birthPlace": {
+            "title": "Miesto narodenia",
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/definitions/address"
+          }
+        }
+      },
+      "legalPerson": {
+        "type": "object",
+        "title": "Právnická osoba",
+        "propertyOrder": 1,
+        "headerTemplate": " {{ self.name }}",
+        "options": {
+          "disable_properties": true,
+          "compact": true
+        },
+        "properties": {
+          "PageAutoCompleteName": {
+            "type": "string",
+            "default": "legal-person",
+            "options": {
+              "hidden": true
+            }
+          },
+          "PageAutoComplete": {
+            "propertyOrder": 100,
+            "$ref": "#/definitions/PageAutoComplete"
+          },
+          "surName": {
+            "title": "Názov",
+            "type": "string",
+            "format": "autocomplete",
+            "options": {
+              "inputAttributes": {
+                "autofocus": "autofocus"
+              },
+              "autocomplete": {
+                "search": "autoComplete_person",
+                "getResultValue": "getResultValue_companyname",
+                "renderResult": "renderResult_person",
+                "autoSelect": true,
+                "grid_columns": 3
+              },
+              "grid_columns": 3
+            }
+          },
+          "compRegNo": {
+            "title": "Ičo",
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/definitions/address"
+          },
+          "personAddInfo": {
+            "$ref": "#/definitions/personAddInfo"
+          },
+          "statutoryBody": {
+            "options": {
+              "collapsed": true
+            },
+            "title": "Štatutár/zástupca - fyzická osoba",
+            "type": "array",
+            "format": "tabs-top",
+            "minItems": 1,
+            "items": {
+              "title": "Štatutár",
+              "headerTemplate": " Štatutár {{ self.surName }} {{ self.lastName}}",
+              "$ref": "#/definitions/naturalPerson",
+              "properties": {
+                "startDate": {
+                  "title": "Deň vzniku funkcie",
+                  "propertyOrder": 300,
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        }
+      },
+      "personAddInfo": {
+        "type": "object",
+        "propertyOrder": 3,
+        "title": "Dodatočné údaje",
+        "options": {
+          "collapsed": true,
+          "disable_properties": true
+        },
+        "properties": {
+          "registryCourt": {
+            "title": "Registrový súd",
+            "type": "string",
+            "enum": [
+              "Okresný súd Bratislava",
+              "Okresný súd Košice",
+              "Okresný súdu Nitra",
+              "Okresný súd Banská Bystrica",
+              "Okresný súd Trenčín",
+              "Okresný súd Trnava",
+              "Okresný súd Prešov",
+              "Okresný súd Žilina"
+            ]
+          },
+          "registryCourtSection": {
+            "title": "Vložka číslo",
+            "type": "string"
+          },
+          "registryCourtInsertNo": {
+            "title": "Oddiel",
+            "type": "string",
+            "enum": [
+              "Pš",
+              "Sa",
+              "Sro",
+              "Sr",
+              "Firm",
+              "Dr",
+              "Po",
+              "Pšn"
+            ]
+          },
+          "accountNumber": {
+            "title": "Iban",
+            "type": "string"
+          },
+          "taxIdentificationNumber": {
+            "title": "Dičo",
+            "type": "string"
+          },
+          "ivat": {
+            "title": "Dičo DPH",
+            "type": "string"
+          },
+          "mobil": {
+            "title": "Mobil",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "web": {
+            "title": "Web",
+            "type": "string",
+            "fax": {
+              "title": "Fax",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "address": {
+        "type": "object",
+        "propertyOrder": 2,
+        "title": "Adresa",
+        "options": {
+          "disable_properties": true
+        },
+        "properties": {
+          "street": {
+            "title": "Názov ulice",
+            "type": "string"
+          },
+          "streetNumber": {
+            "title": "Súpisné číslo",
+            "type": "string"
+          },
+          "orientationNumber": {
+            "title": "Popisné číslo",
+            "type": "string"
+          },
+          "municipality": {
+            "title": "Obec",
+            "type": "string"
+          },
+          "zip": {
+            "title": "Poštové smerovacie číslo",
+            "type": "string"
+          },
+          "state": {
+            "title": "Štát",
+            "type": "string"
+          }
+        }
+      },
+      "institution": {
+        "$ref": "#/definitions/address",
+        "id": "inline",
+        "options": {},
+        "properties": {
+          "inlineAddress": {
+            "format": "select2",
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "select2": {
+                "width": "100%"
+              },
+              "compact": "false"
+            },
+            "type": "string"
+          },
+          "surName": {
+            "type": "string",
+            "template": "{{itemAt institution 0}}",
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "hidden": "true"
+            }
+          },
+          "street": {
+            "template": "{{itemAt institution 1}}",
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "hidden": "true"
+            }
+          },
+          "streetNumber": {
+            "template": "{{itemAt institution 2}}",
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "hidden": "true"
+            }
+          },
+          "zip": {
+            "template": "{{itemAt institution 3}}",
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "hidden": "true"
+            }
+          },
+          "municipality": {
+            "template": "{{itemAt institution 4}}",
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "hidden": "true"
+            }
+          },
+          "state": {
+            "watch": {
+              "institution": "inline.inlineAddress"
+            },
+            "options": {
+              "hidden": "true"
+            }
+          },
+          "orientationNumber": {
+            "options": {
+              "hidden": "true"
+            }
+          }
+        }
+      }
+    }
+  }

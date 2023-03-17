@@ -68,7 +68,7 @@
               ]
             },
             "ownership": {
-              "$ref": "./objects.json#/definitions/ownership"
+             
             },
             "share": {
               "type": "string",
